@@ -1,5 +1,6 @@
 from functions import conectar_bd, cadastrar_usuario, autenticar_usuario
 
+
 def main():
     conn, cursor = conectar_bd()
 
@@ -9,7 +10,7 @@ def main():
         print("2. Autenticar usuário")
         print("3. Sair")
 
-        escolha = input("Digite o número da opção desejada: ")
+        escolha = input("\nDigite o número da opção desejada: ")
 
         if escolha == '1':
             cadastrar_usuario(conn, cursor)
@@ -22,6 +23,7 @@ def main():
             print("Opção inválida. Tente novamente.")
 
     conn.close()
+
 
 if __name__ == "__main__":
     main()
