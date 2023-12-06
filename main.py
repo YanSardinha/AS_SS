@@ -1,16 +1,13 @@
-from functions import conectar_bd, cadastrar_usuario, autenticar_usuario
+from utils import conectar_bd, cadastrar_usuario, autenticar_usuario, constants
 
 
 def main():
     conn, cursor = conectar_bd()
 
     while True:
-        print("\nEscolha uma opção:")
-        print("1. Cadastrar usuário")
-        print("2. Autenticar usuário")
-        print("3. Sair")
+        print(constants['MSG_INICIAL'])
 
-        escolha = input("\nDigite o número da opção desejada: ")
+        escolha = input(constants['PERGUNTA_OPCAO'])
 
         if escolha == '1':
             cadastrar_usuario(conn, cursor)
