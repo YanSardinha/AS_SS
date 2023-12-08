@@ -6,7 +6,6 @@ def main():
 
     while True:
         print(constants['MSG_INICIAL'])
-
         escolha = input(constants['PERGUNTA_OPCAO'])
 
         if escolha == '1':
