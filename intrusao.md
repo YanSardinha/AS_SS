@@ -1,59 +1,47 @@
-#### Teste de SQL Injection Aprofundado
+### Teste de SQL Injection
 
-Para assegurar a robustez do sistema contra ataques de SQL Injection, conduzimos uma série de testes manuais. Estes testes visam identificar potenciais falhas de segurança ao processar entradas maliciosas no script CLI.
+Para garantir a segurança contra ataques de SQL Injection, realizamos testes automatizados utilizando o script `test_security`. Estes testes visam identificar falhas de segurança ao processar entradas maliciosas.
 
-##### Métodos de Teste Detalhados:
+#### Métodos de Teste Detalhados:
 
-1. **Inserção Direta de Strings de SQL Injection**:
-   - Executamos `main.py` e selecionamos a opção de cadastro ou autenticação de usuário.
-   - Inserimos strings maliciosas típicas de SQL Injection, como `' OR '1'='1`, `' OR '1'='1' --`, `%a%`, em campos de nome de usuário ou senha.
-   - Observamos e registramos o comportamento do sistema, buscando acesso não autorizado ou comportamentos inesperados que indiquem possíveis vulnerabilidades.
+1. **Teste Automatizado com Strings Maliciosas**:
+   - Utilizamos o método `testar_sql_injection` para inserir automaticamente strings típicas de SQL Injection, como `' OR '1'='1'`, `' OR '1'='1' --`, `%a%`.
+   - O sistema é verificado quanto a acessos não autorizados ou comportamentos anormais que possam indicar vulnerabilidades.
+   - Os resultados demonstram resistência a ataques de SQL Injection, devido ao uso de consultas parametrizadas.
 
-2. **Teste com Entradas Maliciosas Específicas**:
-   - Além das entradas comuns de SQL Injection, testamos strings que exploram particularidades do SQLite, como `' UNION SELECT * FROM usuarios --`.
-   - Avaliamos como essas entradas afetam o sistema, procurando por sinais de execução de comandos SQL não intencionais.
-
-3. **Resultados**:
-    - O sistema demonstrou resistência a ataques de SQL Injection, graças à implementação de consultas parametrizadas (`cursor.execute('SELECT * FROM usuarios WHERE username = ?', (username,))`), que ajudam a prevenir a interpretação de entradas maliciosas como comandos SQL.
+2. **Avaliação da Segurança Contra SQL Injection**:
+   - O uso de consultas parametrizadas (`cursor.execute('SELECT * FROM usuarios WHERE username = ?', (username,))`) previne a execução de entradas maliciosas como comandos SQL.
 
 ---
 
-    #### Teste de Resistência de Hashes de Senha contra Rainbow Tables
+### Teste de Força Bruta em Autenticação
 
-Para avaliar a segurança dos hashes de senha armazenados no banco de dados, propomos a implementação de testes usando Rainbow Tables. Este teste verificará a resistência dos hashes gerados pelo sistema contra ataques de decodificação por Rainbow Tables.
+Utilizamos o método `testar_forca_bruta` no script `test_security` para avaliar a resistência do sistema a ataques de força bruta.
 
-##### Planejamento do Teste com Rainbow Tables:
+#### Métodos de Teste de Força Bruta:
 
-1. **Criação de uma Rainbow Table para Teste**:
-   - Desenvolveremos uma Rainbow Table contendo hashes comuns e seus correspondentes valores de texto claro.
-   - Esta tabela será usada para tentar encontrar correspondências com os hashes armazenados no banco de dados.
+1. **Teste Automatizado de Tentativas de Login**:
+   - Realizamos tentativas automáticas de login usando uma gama de senhas para um usuário de teste.
+   - Medimos o tempo necessário para quebrar a senha, avaliando a eficácia das medidas de segurança contra força bruta.
 
-2. **Teste de Correspondência de Hash**:
-   - Compararemos os hashes de senha armazenados no banco de dados com os hashes na Rainbow Table.
-   - Um hash que corresponda a um valor na Rainbow Table pode indicar uma vulnerabilidade.
-
-3. **Avaliação**:
-   - Percebemos que mesmo dois usuários com a mesma senha terão hashes diferentes, devido ao uso de um salt aleatório.
+2. **Resultados e Avaliação**:
+   - O sistema demonstra uma resistência adequada contra tentativas de força bruta (30 segundos para uma senha de 8 caracteres).
 
 ---
 
-#### Teste de Resistência de Hashes de Senha contra Rainbow Tables
+### Teste de Resistência de Hashes de Senha contra Rainbow Tables
 
-Para avaliar a segurança dos hashes de senha armazenados no banco de dados, realizamos testes usando Rainbow Tables. Este teste visa verificar a resistência dos hashes gerados pelo sistema contra ataques de decodificação por Rainbow Tables.
+Para avaliar a segurança dos hashes de senha, o script `test_hashs` foi utilizado para realizar testes de resistência contra ataques de Rainbow Tables.
 
-##### Planejamento do Teste com Rainbow Tables:
+#### Planejamento e Execução:
 
-1. **Criação de uma Rainbow Table para Teste**:
-   - Desenvolvemos uma Rainbow Table contendo hashes comuns e seus correspondentes valores de texto claro.
-   - Esta tabela foi usada para tentar encontrar correspondências com os hashes armazenados no banco de dados.
+1. **Implementação de Salt Aleatório**:
+   - Implementamos um sistema de geração de salt aleatório, concatenando este salt com as senhas antes da aplicação do hash.
+   - Inserimos múltiplos usuários com a mesma senha para avaliar a eficácia do salting.
 
-2. **Teste de Correspondência de Hash**:
-   - Comparamos os hashes de senha armazenados no banco de dados com os hashes na Rainbow Table.
-   - Um hash que corresponda a um valor na Rainbow Table indicaria uma vulnerabilidade.
+2. **Verificação de Hashes Únicos para Senhas Iguais**:
+   - Verificamos se usuários com senhas idênticas possuem hashes diferentes.
+   - Concluímos que a geração de salt aleatório garante hashes únicos, mesmo para senhas iguais.
 
-3. **Implementação de Salt Aleatório e Resultados**:
-   - Implementamos um sistema de geração de salt aleatório e concatenação deste salt com as senhas antes da aplicação do hash.
-   - Observamos que mesmo dois usuários com a mesma senha geram hashes diferentes, validando a eficácia do salting.
-   - Concluímos que o sistema é resistente contra ataques de decodificação de senha usando Rainbow Tables devido ao uso de salting.
-
----
+3. **Resistência Contra Rainbow Tables**:
+   - Através da verificação, constatamos que o sistema é resistente a ataques de decodificação de senha usando Rainbow Tables, graças ao uso de salting.

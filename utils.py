@@ -20,7 +20,7 @@ Escolha uma opção:
 
 
 def gerar_salt_aleatorio():
-    return faker.pystr(min_chars=16, max_chars=16) 
+    return faker.pystr(min_chars=16, max_chars=16)
 
 
 def conectar_bd():

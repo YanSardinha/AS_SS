@@ -1,11 +1,10 @@
 import sqlite3
 import bcrypt
-from faker import Faker
-from utils import conectar_bd, cadastrar_usuario, autenticar_usuario
+from utils import conectar_bd
 import time
 
 
-def testar_sql_injection(conn, cursor):
+def testar_sql_injection(cursor):
     payloads = ["' OR '1'='1'", "' OR '1'='1' --", "%a%"]
 
     print("\nTeste de SQL Injection:")
@@ -22,10 +21,9 @@ def testar_sql_injection(conn, cursor):
             print(f"Falha no teste de SQL Injection para payload '{payload}': {e}")
 
 
-def testar_forca_bruta(conn, cursor):
+def testar_forca_bruta(cursor):
     usuario_teste = 'usuario0'
-    senha_correta = 'teste123'
-    
+
     print("\nTeste de Força Bruta:")
     
     start_time = time.time()
@@ -44,11 +42,11 @@ def testar_forca_bruta(conn, cursor):
     else:
         print("Força Bruta sem sucesso. Senha não encontrada.")
 
+
 if __name__ == "__main__":
     conn, cursor = conectar_bd()
 
-    testar_sql_injection(conn, cursor)
-
-    testar_forca_bruta(conn, cursor)
+    testar_sql_injection(cursor)
+    testar_forca_bruta(cursor)
 
     conn.close()
